@@ -12,7 +12,7 @@ Edit `dist/products.js` to add products, categories, images and prices. Shared l
 
 The bag persists on this browser using local storage. This is a storefront preview with sample INR prices. It does not accept payments or create orders. Connect a commerce backend and payment provider before launching sales; prices, inventory, taxes and delivery must be validated on the server.
 
-MIROKU uses a minimal text wordmark and an M favicon. Product photographs are remotely served from Unsplash. Sources:
+MIROKU uses the supplied monochrome logo in the header and as the favicon. Product photographs are remotely served from Unsplash. Sources:
 - https://unsplash.com/photos/a-pair-of-white-sneakers-sitting-on-top-of-a-wooden-table-JhCVZC7FwX4
 - https://unsplash.com/photos/black-wireless-headphones-on-white-table-6jMXHpbpL0M
 - https://unsplash.com/photos/a-tote-bag-hanging-on-a-wall-pgEImVUs2rI
