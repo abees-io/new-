@@ -7,3 +7,5 @@
 .brand img{width:32px;height:36px;object-fit:contain}@media(max-width:600px){.brand img{width:26px;height:30px}}
 
 .catalog-note{font-size:13px;color:var(--muted);margin:0 0 20px}.add:disabled,.primary:disabled{opacity:.5;cursor:not-allowed}
+
+.price-display{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}.price-display del,.admin-product del{color:var(--muted);font-size:12px}.discount-label{color:#b23a10;font-size:12px!important}.danger{color:#b12a1b!important}

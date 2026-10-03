@@ -50,3 +50,8 @@ create policy "MIROKU admin image cleanup" on storage.objects for delete to auth
 commit;
 -- Must return one row. If empty, create/confirm the admin Auth user, then rerun.
 select a.user_id,u.email from public.miroku_admins a join auth.users u on u.id=a.user_id;
+
+-- Optional original-price support (also safe when upgrading existing stores).
+alter table public.miroku_products add column if not exists compare_at_price numeric(12,2);
+alter table public.miroku_products drop constraint if exists miroku_products_compare_price_check;
+alter table public.miroku_products add constraint miroku_products_compare_price_check check(compare_at_price is null or (compare_at_price>=price and compare_at_price<=10000000));
