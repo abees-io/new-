@@ -1,6 +1,6 @@
 # Activate MIROKU product management
 
-The website connects to project `yvdutpojbsygasksikdc` with the supplied publishable key. This key cannot create database tables or provision an administrator.
+The website connects to project `cjrgnculemvkucoedlod` with the supplied publishable key. This key cannot create database tables or provision an administrator.
 
 1. In Supabase Authentication → Users, create the user `murokireview@gmail.com`. Set a password yourself and confirm the email. Do not share the password. If the user already exists, reuse it.
 2. In SQL Editor, paste and run the complete `supabase/setup.sql` file. It creates product tables, administrator permissions and the photo bucket. The final query must show the admin email. If it returns no rows, confirm the Auth user then rerun the script.
