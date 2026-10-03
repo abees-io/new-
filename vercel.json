@@ -4,5 +4,7 @@
   "buildCommand": "",
   "installCommand": "",
   "outputDirectory": "dist",
-  "cleanUrls": false
+  "cleanUrls": false,
+  "rewrites": [{ "source": "/admin", "destination": "/admin.html" }],
+  "headers": [{ "source": "/admin", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }]
 }
