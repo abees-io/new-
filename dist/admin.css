@@ -3,3 +3,4 @@
 .photo-previews{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.photo-tile{border:1px solid var(--line);padding:8px;display:flex;flex-direction:column;align-items:start}.photo-tile img{width:100%;aspect-ratio:1;object-fit:cover}.photo-tile span{font-size:12px;margin-top:7px}.photo-tile button{padding:5px 0;font-size:12px}@media(max-width:600px){.photo-previews{grid-template-columns:repeat(2,1fr)}}
 
 #product-form select{display:block;width:100%;border:1px solid #ddd;padding:12px;margin-top:7px;border-radius:3px}
+.orders-section{margin-top:64px;border-top:1px solid #eee;padding-top:40px}.order-card{padding:24px;margin:20px 0;border:1px solid #e8e8e8;overflow-wrap:anywhere}.order-heading{display:flex;justify-content:space-between;gap:16px}.order-card p{line-height:1.7;font-size:14px}

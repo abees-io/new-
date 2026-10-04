@@ -18,3 +18,6 @@ MIROKU uses the supplied monochrome logo in the header and as the favicon. Produ
 - https://unsplash.com/photos/a-tote-bag-hanging-on-a-wall-pgEImVUs2rI
 - https://unsplash.com/photos/gray-cup-XtyxEBiA8D8
 - https://unsplash.com/photos/black-framed-sunglasses-on-white-surface-IFbyJ7DCLV4
+
+## Razorpay checkout
+The bag now links to `/checkout.html`. Complete the private server configuration and order database setup described in [supabase/CHECKOUT.md](supabase/CHECKOUT.md) to enable payments. No private keys are included in the repository. New orders and customer delivery addresses appear in the signed-in admin's Orders section.
