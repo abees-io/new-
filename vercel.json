@@ -5,6 +5,14 @@
   "installCommand": "",
   "outputDirectory": "dist",
   "cleanUrls": false,
-  "rewrites": [{ "source": "/admin", "destination": "/admin.html" }, { "source": "/admin/orders", "destination": "/orders.html" }],
-  "headers": [{ "source": "/admin", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }]
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/orders", "destination": "/orders.html" }
+  ],
+  "headers": [
+    {
+      "source": "/admin",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ]
 }

@@ -1,2 +1,54 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>MIROKU — Orders</title><link rel="icon" href="/assets/logo.png"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/admin.css"><link rel="stylesheet" href="/orders.css"><script type="module" src="/orders.js"></script></head><body><header><a class="brand" href="/"><img src="/assets/logo.png" alt="">MIROKU</a><span class="admin-label">Store admin</span><a href="/shop.html" class="text-link">View store</a></header><main class="admin-main"><nav class="admin-navigation" aria-label="Admin navigation"><a href="/admin">Products</a><a href="/admin/orders" aria-current="page">Orders</a></nav><div id="orders-message" role="status" aria-live="polite">Checking your admin access…</div><section id="orders-workspace" hidden><div class="admin-heading orders-page-heading"><div><div class="eyebrow">Your store, your orders</div><h1>Orders.</h1><p>Paid orders, in one place.</p></div><div class="actions orders-tools"><button class="secondary" id="order-sort" aria-label="Sort orders: latest first">Latest first ↓</button><button class="secondary" id="refresh-orders">Refresh</button><button class="text-button" id="orders-sign-out">Sign out</button></div></div><p id="orders-count" class="field-note" aria-live="polite"></p><ol id="order-list" class="order-list" aria-label="Paid orders"></ol><button class="secondary" id="more-orders" hidden>Load more orders</button></section></main></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>MIROKU — Orders</title>
+    <link rel="icon" href="/assets/logo.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/admin.css" />
+    <link rel="stylesheet" href="/orders.css" />
+    <script type="module" src="/orders.js"></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/"><img src="/assets/logo.png" alt="" />MIROKU</a
+      ><span class="admin-label">Store admin</span
+      ><a href="/shop.html" class="text-link">View store</a>
+    </header>
+    <main class="admin-main">
+      <nav class="admin-navigation" aria-label="Admin navigation">
+        <a href="/admin">Products</a
+        ><a href="/admin/orders" aria-current="page">Orders</a>
+      </nav>
+      <div id="orders-message" role="status" aria-live="polite">
+        Checking your admin access…
+      </div>
+      <section id="orders-workspace" hidden>
+        <div class="admin-heading orders-page-heading">
+          <div>
+            <div class="eyebrow">Your store, your orders</div>
+            <h1>Orders.</h1>
+            <p>Paid orders, in one place.</p>
+          </div>
+          <div class="actions orders-tools">
+            <button
+              class="secondary"
+              id="order-sort"
+              aria-label="Sort orders: latest first"
+            >
+              Latest first ↓</button
+            ><button class="secondary" id="refresh-orders">Refresh</button
+            ><button class="text-button" id="orders-sign-out">Sign out</button>
+          </div>
+        </div>
+        <p id="orders-count" class="field-note" aria-live="polite"></p>
+        <ol id="order-list" class="order-list" aria-label="Paid orders"></ol>
+        <button class="secondary" id="more-orders" hidden>
+          Load more orders
+        </button>
+      </section>
+    </main>
+  </body>
+</html>
