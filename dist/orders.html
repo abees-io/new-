@@ -10,11 +10,27 @@
     <link rel="stylesheet" href="/admin.css" />
     <link rel="stylesheet" href="/orders.css" />
     <script type="module" src="/orders.js"></script>
+    <script type="module" src="/navigation.js"></script>
   </head>
   <body>
     <header>
-      <a class="brand" href="/"><img src="/assets/logo.png" alt="" />MIROKU</a
-      ><span class="admin-label">Store admin</span
+      <div class="header-start">
+        <a class="back-arrow" href="/admin" aria-label="Go back" title="Go back"
+          ><svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m14 6-6 6 6 6M8 12h12" /></svg></a
+        ><a class="brand" href="/"
+          ><img src="/assets/logo.png" alt="" />MIROKU</a
+        >
+      </div>
+      <span class="admin-label">Store admin</span
       ><a href="/shop.html" class="text-link">View store</a>
     </header>
     <main class="admin-main">
