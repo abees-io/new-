@@ -38,15 +38,18 @@ function notify(message) {
   toastTimer = setTimeout(() => el.classList.remove("visible"), 2600);
 }
 function save() {
+  let stored = true;
   try {
     localStorage.setItem(BAG_STORAGE_KEY, JSON.stringify(cart));
   } catch {
+    stored = false;
     notify("Your bag will be kept for this visit only.");
   }
   document.querySelector("#bag-count").textContent = Object.values(cart).reduce(
     (a, b) => a + b,
     0,
   );
+  return stored;
 }
 function add(id) {
   const product = products.find((p) => p.id === id);
@@ -60,9 +63,10 @@ function add(id) {
     return;
   }
   cart[id] = (cart[id] || 0) + 1;
-  save();
-  notify("Added to your bag");
+  const stored = save();
+  if (stored) notify("Added to your bag");
   if (page === "cart") renderCart();
+  return stored;
 }
 function deliveryLabel(p) {
   return p.delivery_fee == null
@@ -122,7 +126,10 @@ dialog.addEventListener("click", (e) => {
 document.addEventListener("click", (e) => {
   const b = e.target.closest("button");
   if (!b) return;
-  if (b.dataset.add) add(b.dataset.add);
+  if (b.dataset.add && add(b.dataset.add) && page !== "cart") {
+    location.assign("cart.html");
+    return;
+  }
   if (b.dataset.detail) {
     const p = products.find((p) => p.id === b.dataset.detail);
     document.querySelector("#detail-content").innerHTML =
