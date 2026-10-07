@@ -195,13 +195,6 @@ h1 em {
   object-fit: cover;
   mix-blend-mode: multiply;
 }
-.hero-caption {
-  position: absolute;
-  bottom: 22px;
-  left: 26px;
-  font-size: 12px;
-  color: #666;
-}
 .hero-stamp {
   position: absolute;
   right: 24px;
@@ -216,24 +209,6 @@ h1 em {
   font-size: 11px;
   line-height: 1.4;
   background: #ffffffab;
-}
-.benefits {
-  display: flex;
-  justify-content: space-between;
-  padding: 23px 5px;
-  border-bottom: 1px solid var(--line);
-  color: #696969;
-  font-size: 13px;
-}
-.benefits span {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.benefits b {
-  color: var(--orange);
-  font-size: 18px;
-  font-weight: 400;
 }
 .section-head {
   margin: 54px 0 24px;
@@ -330,27 +305,6 @@ h1 em {
   background: var(--orange);
   color: white;
   border-color: var(--orange);
-}
-.editorial {
-  margin-top: 60px;
-  border-top: 1px solid var(--line);
-  padding: 38px 0 0;
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-}
-.editorial h2 {
-  font-size: 32px;
-  font-weight: 400;
-  letter-spacing: -1px;
-  margin: 0;
-}
-.editorial p {
-  max-width: 360px;
-  font-size: 14px;
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.8;
 }
 footer {
   border-top: 1px solid var(--line);
@@ -612,12 +566,6 @@ dialog::backdrop {
     gap: 25px;
     grid-template-columns: 1fr 290px;
   }
-  .benefits {
-    font-size: 11px;
-  }
-  .editorial h2 {
-    font-size: 26px;
-  }
 }
 @media (max-width: 600px) {
   header {
@@ -671,20 +619,6 @@ dialog::backdrop {
     top: 10px;
     font-size: 10px;
   }
-  .hero-caption {
-    font-size: 11px;
-    bottom: 12px;
-  }
-  .benefits {
-    gap: 10px;
-    justify-content: space-around;
-  }
-  .benefits span:last-child {
-    display: none;
-  }
-  .benefits span {
-    gap: 6px;
-  }
   .section-head {
     margin-top: 35px;
   }
@@ -717,11 +651,6 @@ dialog::backdrop {
     font-size: 9px;
     top: 9px;
     left: 9px;
-  }
-  .editorial {
-    flex-direction: column;
-    margin-top: 40px;
-    gap: 14px;
   }
   .footer-top {
     flex-wrap: wrap;

@@ -60,6 +60,7 @@ async function api(path, body) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(20000),
   });
   const data = await r.json().catch(() => ({
     error: "Payment service is unavailable. Please contact MIROKU.",
@@ -117,9 +118,8 @@ async function verify(response) {
       `${e.message} If you paid, check payment status or contact MIROKU before paying again.`,
     );
   } finally {
-    button.disabled = false;
+    setProcessing(false);
     button.textContent = "Check payment status";
-    processing = false;
   }
 }
 function loadRazorpay() {
@@ -145,6 +145,17 @@ retry.className = "text-link";
 retry.textContent = "Reopen payment window";
 retry.hidden = true;
 button.after(retry);
+function setProcessing(value) {
+  processing = value;
+  button.disabled = value || (!pending && !items.length);
+  retry.disabled = value;
+}
+function lockAddress() {
+  form.querySelectorAll("input,select").forEach((el) => {
+    el.required = false;
+    el.disabled = true;
+  });
+}
 function openPayment(customer = {}) {
   const checkout = new window.Razorpay({
     key: pending.key,
@@ -164,8 +175,7 @@ function openPayment(customer = {}) {
       ondismiss() {
         if (finished) return;
         message("Payment window closed. Check payment status before retrying.");
-        processing = false;
-        button.disabled = false;
+        setProcessing(false);
         button.textContent = "Check payment status";
         retry.hidden = false;
       },
@@ -178,15 +188,17 @@ function openPayment(customer = {}) {
 }
 retry.addEventListener("click", async () => {
   if (!pending || processing) return;
-  retry.disabled = true;
+  setProcessing(true);
+  let paymentOpened = false;
   try {
     if (await checkStatus()) return;
     await loadRazorpay();
     openPayment();
+    paymentOpened = true;
   } catch (e) {
     message(e.message);
   } finally {
-    retry.disabled = false;
+    if (!paymentOpened) setProcessing(false);
   }
 });
 try {
@@ -230,9 +242,7 @@ try {
     button.disabled = false;
     button.textContent = "Check payment status";
     retry.hidden = false;
-    form
-      .querySelectorAll("input,select")
-      .forEach((el) => (el.required = false));
+    lockAddress();
     await checkStatus();
   }
 } catch {
@@ -243,8 +253,7 @@ try {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (processing) return;
-  processing = true;
-  button.disabled = true;
+  setProcessing(true);
   let paymentOpened = false;
   try {
     if (pending) {
@@ -260,11 +269,10 @@ form.addEventListener("submit", async (e) => {
     $("#checkout-total").textContent = money(order.amount / 100);
     await loadRazorpay();
     pending = { ...order, token, items };
-    sessionStorage.setItem("miroku-payment", JSON.stringify(pending));
-    form.querySelectorAll("input,select").forEach((el) => {
-      el.required = false;
-      el.disabled = true;
-    });
+    try {
+      sessionStorage.setItem("miroku-payment", JSON.stringify(pending));
+    } catch {}
+    lockAddress();
     message(
       order.mode === "test"
         ? "Test mode: no real money will be charged."
@@ -276,8 +284,7 @@ form.addEventListener("submit", async (e) => {
     message(err.message);
   } finally {
     if (!paymentOpened) {
-      processing = false;
-      button.disabled = items.length === 0;
+      setProcessing(false);
     }
   }
 });

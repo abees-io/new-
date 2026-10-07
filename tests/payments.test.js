@@ -122,3 +122,9 @@ test("new Supabase secret key is sent as apikey and never as a JWT", async () =>
     process.env = saved;
   }
 });
+
+test("malformed product entries return a validation error rather than crashing", () => {
+  assert.throws(() => validateCheckout({ ...payload(), items: [null] }), {
+    status: 400,
+  });
+});

@@ -105,9 +105,11 @@ function collectionMarkup() {
     '</div><label><span class="sort-label">Sort: </span><select id="sort" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label></div><p class="shop-count" id="results-count" aria-live="polite"></p><div class="products" id="product-grid"></div>'
   );
 }
+let spotlightQuery;
 function renderSpotlight() {
   const area = document.querySelector("#home-spotlight");
-  if (!area) return;
+  if (!area || spotlightQuery === query) return;
+  spotlightQuery = query;
   const offers = catalogView(products, { query }).filter((p) => p.is_offer);
   const first = offers[0];
   area.hidden = Boolean(query.trim()) && !first;
@@ -179,11 +181,16 @@ if (page === "home" || page === "shop") {
   });
   const search = document.querySelector(".product-search");
   search.addEventListener("submit", (e) => e.preventDefault());
+  let searchTimer;
   search.addEventListener("input", () => {
-    query = document.querySelector("#product-search").value;
-    renderProducts();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      query = document.querySelector("#product-search").value;
+      renderProducts();
+    }, 120);
   });
   search.addEventListener("reset", () => {
+    clearTimeout(searchTimer);
     query = "";
     renderProducts();
     document.querySelector("#product-search").focus();

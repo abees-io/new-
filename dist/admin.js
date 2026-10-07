@@ -60,18 +60,21 @@ async function refresh() {
       "Could not load products. Check the database setup and try Refresh.",
     );
   products = data;
-  const [deliveryProbe, imageProbe, discountsProbe, offersProbe] =
-    await Promise.all(
-      ["delivery_fee", "images", "compare_at_price", "is_offer"].map((column) =>
-        db.from("miroku_products").select(column).limit(1),
-      ),
-    );
-  deliveryReady = !deliveryProbe.error;
+  const columns = ["delivery_fee", "images", "compare_at_price", "is_offer"];
+  const capabilities = products.length
+    ? columns.map((column) => Object.hasOwn(products[0], column))
+    : await Promise.all(
+        columns.map(async (column) => {
+          const { error } = await db
+            .from("miroku_products")
+            .select(column)
+            .limit(1);
+          return !error;
+        }),
+      );
+  [deliveryReady, imagesReady, discountsReady, offersReady] = capabilities;
   form.elements.delivery_mode.disabled = !deliveryReady;
   form.elements.delivery_cost.disabled = !deliveryReady;
-  imagesReady = !imageProbe.error;
-  discountsReady = !discountsProbe.error;
-  offersReady = !offersProbe.error;
   form.elements.is_offer.disabled = !offersReady;
   document.querySelector("#offer-setup-note").hidden = offersReady;
   form.elements.compare_at_price.disabled = !discountsReady;
