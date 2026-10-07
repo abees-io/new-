@@ -14,6 +14,7 @@ let db,
   discountsReady = false,
   imagesReady = false,
   deliveryReady = false,
+  offersReady = false,
   recovering = location.hash.includes("type=recovery");
 const editor = $("#product-dialog"),
   form = $("#product-form");
@@ -59,16 +60,20 @@ async function refresh() {
       "Could not load products. Check the database setup and try Refresh.",
     );
   products = data;
-  const [deliveryProbe, imageProbe, discountsProbe] = await Promise.all(
-    ["delivery_fee", "images", "compare_at_price"].map((column) =>
-      db.from("miroku_products").select(column).limit(1),
-    ),
-  );
+  const [deliveryProbe, imageProbe, discountsProbe, offersProbe] =
+    await Promise.all(
+      ["delivery_fee", "images", "compare_at_price", "is_offer"].map((column) =>
+        db.from("miroku_products").select(column).limit(1),
+      ),
+    );
   deliveryReady = !deliveryProbe.error;
   form.elements.delivery_mode.disabled = !deliveryReady;
   form.elements.delivery_cost.disabled = !deliveryReady;
   imagesReady = !imageProbe.error;
   discountsReady = !discountsProbe.error;
+  offersReady = !offersProbe.error;
+  form.elements.is_offer.disabled = !offersReady;
+  document.querySelector("#offer-setup-note").hidden = offersReady;
   form.elements.compare_at_price.disabled = !discountsReady;
   form.elements.discount.disabled = !discountsReady;
   render();
@@ -92,7 +97,7 @@ function render() {
     ? products
         .map(
           (p) =>
-            `<article class="admin-product"><img src="${escapeHTML(safeImage(p.image))}" alt="${escapeHTML(p.name)}"><span class="status-label">${p.published ? "Published" : "Draft"}</span><h2>${escapeHTML(p.name)}</h2><p>${currency(p.price)} ${Number(p.compare_at_price) > Number(p.price) ? `<del>${currency(p.compare_at_price)}</del> <span class="discount-label">${discountPercent(p.price, p.compare_at_price)}% off</span>` : ""} · ${p.stock} in stock</p><p>${escapeHTML(p.category)}</p><div class="actions"><button class="secondary" data-edit="${p.id}">Edit</button><button class="text-button" data-toggle="${p.id}">${p.published ? "Unpublish" : "Publish"}</button>${!p.published ? `<button class="text-button danger" data-delete="${p.id}">Delete draft</button>` : ""}</div></article>`,
+            `<article class="admin-product"><img src="${escapeHTML(safeImage(p.image))}" alt="${escapeHTML(p.name)}"><span class="status-label">${p.published ? "Published" : "Draft"}${p.is_offer ? " · Offer" : ""}</span><h2>${escapeHTML(p.name)}</h2><p>${currency(p.price)} ${Number(p.compare_at_price) > Number(p.price) ? `<del>${currency(p.compare_at_price)}</del> <span class="discount-label">${discountPercent(p.price, p.compare_at_price)}% off</span>` : ""} · ${p.stock} in stock</p><p>${escapeHTML(p.category)}</p><div class="actions"><button class="secondary" data-edit="${p.id}">Edit</button><button class="text-button" data-toggle="${p.id}">${p.published ? "Unpublish" : "Publish"}</button>${!p.published ? `<button class="text-button danger" data-delete="${p.id}">Delete draft</button>` : ""}</div></article>`,
         )
         .join("")
     : '<div class="empty-admin"><h2>Your collection starts here.</h2><p>Add your first product, upload a photo, and publish when it is ready.</p></div>';
@@ -139,6 +144,7 @@ function openEditor(p) {
   form.elements.delivery_cost.value = p?.delivery_fee > 0 ? p.delivery_fee : "";
   updateDeliveryFields();
   form.elements.published.checked = !!p?.published;
+  form.elements.is_offer.checked = !!p?.is_offer;
   $("#editor-title").textContent = p ? "Edit product" : "Add product";
   renderPhotoPreviews();
   editor.showModal();
@@ -329,6 +335,7 @@ form.addEventListener("submit", async (e) => {
         form.elements.delivery_cost.value,
       );
     if (imagesReady) record.images = images;
+    if (offersReady) record.is_offer = form.elements.is_offer.checked;
     if (discountsReady) record.compare_at_price = compare;
     if (!record.name || !record.category || !record.description)
       throw new Error("Name, category and description cannot be blank.");

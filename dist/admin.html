@@ -196,6 +196,18 @@
           </p>
           <div id="photo-previews" class="photo-previews"></div>
           <label class="checkbox-label"
+            ><input name="is_offer" type="checkbox" disabled />Offer item —
+            feature on the homepage</label
+          >
+          <p class="field-note">
+            Published offer items appear first. Set the original and selling
+            prices above to show a discount.
+          </p>
+          <p class="field-note" id="offer-setup-note">
+            Enable offers by running supabase/add-offers.sql once in Supabase
+            SQL Editor, then refresh admin.
+          </p>
+          <label class="checkbox-label"
             ><input name="published" type="checkbox" />Publish on the
             storefront</label
           >

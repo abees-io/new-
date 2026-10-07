@@ -55,3 +55,7 @@ select a.user_id,u.email from public.miroku_admins a join auth.users u on u.id=a
 alter table public.miroku_products add column if not exists compare_at_price numeric(12,2);
 alter table public.miroku_products drop constraint if exists miroku_products_compare_price_check;
 alter table public.miroku_products add constraint miroku_products_compare_price_check check(compare_at_price is null or (compare_at_price>=price and compare_at_price<=10000000));
+
+-- Homepage offer selection (also safe for existing installations).
+alter table public.miroku_products add column if not exists is_offer boolean not null default false;
+notify pgrst, 'reload schema';

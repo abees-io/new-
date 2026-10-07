@@ -2,6 +2,7 @@ import { deliveryTotal } from "./delivery.js";
 import { discountPercent } from "./pricing.js";
 import { products as sampleProducts } from "./products.js";
 import { loadCatalog } from "./catalog.js";
+import { catalogView } from "./catalog-view.js";
 import { escapeHTML } from "./html-utils.js";
 import { wholeMoney as money } from "./format.js";
 let products,
@@ -79,33 +80,113 @@ function priceDisplay(p) {
   return `<span class="price-display">${money(p.price)}${Number(p.compare_at_price) > p.price ? ` <del>${money(p.compare_at_price)}</del> <span class="discount-label">${discountPercent(p.price, p.compare_at_price)}% off</span>` : ""}</span>`;
 }
 function card(p) {
-  return `<article><button class="product-image" data-detail="${p.id}" aria-label="View ${p.name}"><img src="${p.image}" alt="${p.name} in ${p.color}" loading="lazy">${p.tag ? `<span class="tag">${p.tag}</span>` : ""}</button><div class="product-info"><h3>${p.name}</h3>${priceDisplay(p)}</div><div class="product-meta"><p>${p.color}${!usingSamples && p.stock === 0 ? " · Sold out" : ""}</p><button class="add" ${!usingSamples && p.stock === 0 ? "disabled" : ""} data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></article>`;
+  return `<article><button class="product-image" data-detail="${p.id}" aria-label="View ${p.name}"><img src="${p.image}" alt="${p.name} in ${p.color}" loading="lazy">${p.is_offer || p.tag ? `<span class="tag${p.is_offer ? " offer-tag" : ""}">${p.is_offer ? "Offer" : p.tag}</span>` : ""}</button><div class="product-info"><h3>${p.name}</h3>${priceDisplay(p)}</div><div class="product-meta"><p>${p.color}${!usingSamples && p.stock === 0 ? " · Sold out" : ""}</p><button class="add" ${!usingSamples && p.stock === 0 ? "disabled" : ""} data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></article>`;
 }
-if (page === "home")
-  main.innerHTML = `<section class="hero"><div class="hero-copy"><div class="eyebrow">The everyday collection</div><h1>Everyday things.<br><em>Extra good.</em></h1><p>A thoughtful edit of the things you reach for, day after day.</p><a class="primary" href="shop.html">Shop the collection</a></div><div class="hero-media"><img src="${products[0]?.image || "assets/logo.png"}" alt="${products[0]?.name || "MIROKU"}"><div class="hero-stamp">LESS,<br>BUT BETTER.</div><span class="hero-caption">${products[0]?.name || "The MIROKU collection"}</span></div></section><div class="benefits"><span><b>◇</b> Thoughtfully selected</span><span><b>＋</b> Everyday versatility</span><span><b>○</b> Simple by design</span></div><section><div class="section-head"><div><h2>Your new everyday.</h2><p>Small upgrades. A better daily routine.</p></div><a class="text-link" href="shop.html">Shop all essentials</a></div><div class="products">${products.slice(0, 4).map(card).join("") || "<p>Our collection is coming soon.</p>"}</div></section><section class="editorial"><div><div class="eyebrow">The MIROKU approach</div><h2>A little less. A little better.</h2></div><p>We believe the things you use every day deserve a little more thought. Useful pieces, simple forms, and room for what matters.</p></section>`;
+
 let category = "All",
-  sort = "featured";
-function renderProducts() {
-  let list = products.filter(
-    (p) => category === "All" || (p.categoryKey || p.category) === category,
+  sort = "featured",
+  query = "";
+function searchMarkup() {
+  return '<form class="product-search" role="search"><label class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="visually-hidden">Search products</span><input id="product-search" type="search" placeholder="Search products, categories, colours…" autocomplete="off" maxlength="120"></label><button type="reset" class="search-clear">Clear</button></form>';
+}
+function collectionMarkup() {
+  return (
+    '<div class="shop-tools"><div class="filters" aria-label="Product categories">' +
+    ["All", ...new Set(products.map((p) => p.categoryKey || p.category))]
+      .map(
+        (c) =>
+          '<button class="filter" data-category="' +
+          escapeHTML(c) +
+          '">' +
+          escapeHTML(c) +
+          "</button>",
+      )
+      .join("") +
+    '</div><label><span class="sort-label">Sort: </span><select id="sort" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label></div><p class="shop-count" id="results-count" aria-live="polite"></p><div class="products" id="product-grid"></div>'
   );
-  if (sort === "low") list.sort((a, b) => a.price - b.price);
-  if (sort === "high") list.sort((a, b) => b.price - a.price);
+}
+function renderSpotlight() {
+  const area = document.querySelector("#home-spotlight");
+  if (!area) return;
+  const offers = catalogView(products, { query }).filter((p) => p.is_offer);
+  const first = offers[0];
+  area.hidden = Boolean(query.trim()) && !first;
+  if (first) {
+    area.innerHTML =
+      '<section class="hero offer-hero" aria-label="Featured offer"><div class="hero-copy"><div class="eyebrow">Featured offer</div><h1>' +
+      first.name +
+      "</h1><p>" +
+      first.description +
+      '</p><p class="offer-price">' +
+      priceDisplay(first) +
+      '</p><button class="primary" data-detail="' +
+      first.id +
+      '">View offer</button></div><button class="hero-media offer-photo" data-detail="' +
+      first.id +
+      '" aria-label="View offer: ' +
+      first.name +
+      '"><img src="' +
+      first.image +
+      '" alt="' +
+      first.name +
+      '"><span class="offer-badge">Offer</span></button></section>' +
+      (offers.length > 1
+        ? '<section class="more-offers"><div class="section-head"><h2>More offers.</h2></div><div class="products">' +
+          offers.slice(1).map(card).join("") +
+          "</div></section>"
+        : "");
+  } else {
+    area.innerHTML =
+      '<section class="hero"><div class="hero-copy"><div class="eyebrow">The everyday collection</div><h1>Everyday things.<br><em>Extra good.</em></h1><p>A thoughtful edit of the things you reach for, day after day.</p><a class="primary" href="#collection">Explore the collection</a></div><div class="hero-media"><img src="' +
+      (products[0]?.image || "assets/logo.png") +
+      '" alt="' +
+      (products[0]?.name || "MIROKU") +
+      '"><div class="hero-stamp">LESS,<br>BUT BETTER.</div></div></section>';
+  }
+}
+function renderProducts() {
+  const list = catalogView(products, { category, query, sort });
   document.querySelector("#product-grid").innerHTML =
-    list.map(card).join("") || "<p>No products in this category yet.</p>";
+    list.map(card).join("") ||
+    '<p class="no-results">' +
+      (query.trim()
+        ? "No products match your search. Try another name or clear the search."
+        : category === "All"
+          ? "Our collection is coming soon."
+          : "No products in this category yet.") +
+      "</p>";
   document.querySelector("#results-count").textContent =
-    `${list.length} essential${list.length === 1 ? "" : "s"}`;
+    list.length + " product" + (list.length === 1 ? "" : "s");
   document.querySelectorAll("[data-category]").forEach((b) => {
     b.classList.toggle("active", b.dataset.category === category);
     b.setAttribute("aria-pressed", String(b.dataset.category === category));
   });
+  renderSpotlight();
 }
-if (page === "shop") {
-  main.innerHTML = `<div class="page-heading"><div class="eyebrow">Considered essentials</div><h1>The collection.</h1><p>Good things for your everyday, all in one place.</p></div><div class="shop-tools"><div class="filters" aria-label="Product categories">${["All", ...new Set(products.map((p) => p.categoryKey || p.category))].map((c) => `<button class="filter" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join("")}</div><label><span class="sort-label">Sort: </span><select id="sort" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label></div><p class="shop-count" id="results-count"></p><div class="products" id="product-grid"></div>`;
+if (page === "home" || page === "shop") {
+  main.innerHTML =
+    searchMarkup() +
+    (page === "home"
+      ? '<div id="home-spotlight"></div><section id="collection"><div class="section-head"><div><h2>All your everyday essentials.</h2><p>Explore every product, all in one place.</p></div></div>' +
+        collectionMarkup() +
+        "</section>"
+      : '<div class="page-heading"><div class="eyebrow">Considered essentials</div><h1>The collection.</h1><p>Good things for your everyday, all in one place.</p></div>' +
+        collectionMarkup());
   renderProducts();
   document.querySelector("#sort").addEventListener("change", (e) => {
     sort = e.target.value;
     renderProducts();
+  });
+  const search = document.querySelector(".product-search");
+  search.addEventListener("submit", (e) => e.preventDefault());
+  search.addEventListener("input", () => {
+    query = document.querySelector("#product-search").value;
+    renderProducts();
+  });
+  search.addEventListener("reset", () => {
+    query = "";
+    renderProducts();
+    document.querySelector("#product-search").focus();
   });
 }
 function renderCart() {

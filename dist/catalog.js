@@ -3,6 +3,7 @@ import { escapeHTML, safeImage } from "./html-utils.js";
 export function storefrontProduct(p) {
   return {
     ...p,
+    searchText: [p.name, p.category, p.color, p.description].join(" "),
     categoryKey: p.category,
     price: Number(p.price),
     stock: Number(p.stock),

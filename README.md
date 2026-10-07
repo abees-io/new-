@@ -35,3 +35,7 @@ The bag now links to `/checkout.html`. Complete the private server configuration
 - `supabase/`: initial schema, upgrade scripts and setup guides.
 
 Run `npm test` for the payment checks. Database setup scripts are run in Supabase's SQL Editor, not as part of a deployment.
+
+## Homepage offers and search
+
+Run `supabase/add-offers.sql` once in Supabase SQL Editor, then refresh admin. In Add/Edit Product, select **Offer item** and publish the product. Published offer products appear in the homepage spotlight and first in Featured sorting. Original price and selling price control the displayed discount. All published products appear in the homepage collection; customers can search by product name, category, colour and description, filter categories, and sort prices.
