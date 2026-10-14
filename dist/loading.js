@@ -40,9 +40,13 @@ export function finishLoading() {
       if (event.target === loader && event.propertyName === "opacity") remove();
     });
     loader.addEventListener("animationend", (event) => {
-      if (event.target === loader) remove();
+      if (
+        event.target === loader &&
+        event.animationName === "loader-scene-fade"
+      )
+        remove();
     });
-    setTimeout(remove, firstOpening ? 1050 : 200);
+    setTimeout(remove, firstOpening ? 1450 : 200);
   };
   const remaining = firstOpening
     ? Math.max(0, 1500 - (performance.now() - openedAt))

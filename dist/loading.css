@@ -42,7 +42,9 @@
   animation: loader-exit 0.15s ease-in both;
 }
 .site-loader.is-first-load.is-closing {
-  animation: loader-zoom-through 0.95s linear both;
+  animation:
+    loader-zoom-through 0.95s linear both,
+    loader-scene-fade 0.4s 0.95s linear forwards;
   transition: none;
 }
 .site-loader.is-first-load.is-closing img {
@@ -101,8 +103,34 @@ body.is-loading {
     filter: blur(0);
   }
   100% {
-    opacity: 0;
+    opacity: 1;
     transform: scale(48);
     filter: blur(0);
+  }
+}
+
+.site-loader.is-first-load.is-closing:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #087bfa;
+  pointer-events: none;
+  animation: loader-blue-fill 0.95s linear both;
+}
+@keyframes loader-blue-fill {
+  0%,
+  55% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes loader-scene-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
