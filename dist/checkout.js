@@ -1,3 +1,4 @@
+import { finishLoading } from "./loading.js";
 import { loadCatalog } from "./catalog.js";
 import { escapeHTML } from "./html-utils.js";
 import { money } from "./format.js";
@@ -288,3 +289,5 @@ form.addEventListener("submit", async (e) => {
     }
   }
 });
+
+finishLoading();

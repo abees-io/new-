@@ -1,3 +1,4 @@
+import { finishLoading } from "./loading.js";
 import { deliveryTotal } from "./delivery.js";
 import { discountPercent } from "./pricing.js";
 import { loadCatalog } from "./catalog.js";
@@ -306,3 +307,5 @@ if (usingSamples) {
     "Sample collection · Our product catalogue is being prepared.";
   main.prepend(note);
 }
+
+finishLoading();

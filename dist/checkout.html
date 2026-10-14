@@ -24,8 +24,32 @@
     <link rel="modulepreload" href="/catalog.js" />
     <link rel="modulepreload" href="/html-utils.js" />
     <link rel="modulepreload" href="/format.js" />
+    <link rel="stylesheet" href="/loading.css" />
+    <link rel="preload" as="image" href="/assets/loading-logo.png" />
+    <script type="module" src="/loading.js"></script>
   </head>
   <body>
+    <div
+      id="site-loader"
+      class="site-loader"
+      role="status"
+      aria-label="Loading MIROKU"
+    >
+      <img
+        src="/assets/loading-logo.png"
+        alt=""
+        width="64"
+        height="64"
+        fetchpriority="high"
+      />
+    </div>
+    <noscript
+      ><style>
+        .site-loader {
+          display: none !important;
+        }
+      </style></noscript
+    >
     <header>
       <div class="header-start">
         <a
