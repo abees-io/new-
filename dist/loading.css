@@ -1,4 +1,5 @@
 .site-loader {
+  --logo-size: 64px;
   position: fixed;
   inset: 0;
   z-index: 10000;
@@ -25,8 +26,8 @@
   filter: blur(24px);
 }
 .site-loader img {
-  width: 64px;
-  height: 64px;
+  width: var(--logo-size);
+  height: var(--logo-size);
   object-fit: contain;
 }
 .site-loader.is-first-load img {
@@ -41,8 +42,13 @@
   transition: none;
 }
 .site-loader.is-first-load.is-closing img {
-  animation: loader-left-zoom 2.4s linear forwards;
-  transform-origin: 25% 60%;
+  position: absolute;
+  left: calc(50% - var(--logo-size) * 0.25);
+  top: calc(50% + var(--logo-size) * 0.1);
+  transform: translate(-25%, -60%);
+  animation:
+    loader-left-zoom 2.4s linear forwards,
+    loader-near-blur 2.4s linear forwards;
 }
 .site-loader.is-first-load.is-closing:before {
   animation: loader-background-zoom 2.4s linear forwards;
@@ -62,13 +68,17 @@ body.is-loading {
 }
 @keyframes loader-left-zoom {
   from {
-    transform: scale(1);
+    width: var(--logo-size);
+    height: var(--logo-size);
   }
   to {
-    transform: scale(var(--logo-zoom-scale, 160));
+    width: calc(var(--logo-size) * var(--logo-zoom-scale, 160));
+    height: calc(var(--logo-size) * var(--logo-zoom-scale, 160));
   }
+}
+@keyframes loader-near-blur {
   0%,
-  50% {
+  14% {
     filter: blur(0);
   }
   100% {
@@ -92,9 +102,8 @@ body.is-loading {
   }
 }
 @media (max-width: 600px) {
-  .site-loader img {
-    width: 52px;
-    height: 52px;
+  .site-loader {
+    --logo-size: 52px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -105,3 +114,4 @@ body.is-loading {
     transition: none !important;
   }
 }
+
