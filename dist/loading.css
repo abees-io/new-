@@ -100,32 +100,13 @@ body.is-loading {
   0% {
     opacity: 1;
     transform: scale(1);
-    filter: blur(0);
   }
   100% {
     opacity: 1;
-    transform: scale(48);
-    filter: blur(0);
+    transform: scale(var(--logo-zoom-scale, 160));
   }
 }
 
-.site-loader.is-first-load.is-closing:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #087bfa;
-  pointer-events: none;
-  animation: loader-blue-fill 0.95s linear both;
-}
-@keyframes loader-blue-fill {
-  0%,
-  55% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 @keyframes loader-scene-fade {
   from {
     opacity: 1;

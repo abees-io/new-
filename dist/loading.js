@@ -35,6 +35,27 @@ export function finishLoading() {
     return;
   }
   const close = () => {
+    if (firstOpening) {
+      const image = loader.querySelector("img");
+      const scene = loader.getBoundingClientRect();
+      const logo = image.getBoundingClientRect();
+      loader.style.transformOrigin =
+        logo.left -
+        scene.left +
+        logo.width * 0.25 +
+        "px " +
+        (logo.top - scene.top + logo.height * 0.6) +
+        "px";
+      loader.style.setProperty(
+        "--logo-zoom-scale",
+        String(
+          Math.max(
+            40,
+            Math.max(scene.width, scene.height) / (logo.width * 0.18),
+          ),
+        ),
+      );
+    }
     loader.classList.add("is-closing");
     loader.addEventListener("transitionend", (event) => {
       if (event.target === loader && event.propertyName === "opacity") remove();
