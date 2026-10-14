@@ -12,7 +12,7 @@
   pointer-events: auto;
 }
 .site-loader.is-first-load {
-  background: #040a13;
+  background: #130804;
   transition-duration: 0.25s;
 }
 .site-loader.is-first-load:before {
@@ -21,9 +21,9 @@
   inset: -18%;
   z-index: -1;
   background:
-    radial-gradient(ellipse at 18% 55%, #0895dc9c 0%, transparent 55%),
-    radial-gradient(ellipse at 48% 28%, #103d8b70 0%, transparent 58%),
-    linear-gradient(110deg, #085797 0%, #073776 34%, #071b39 65%, #03070d 95%);
+    radial-gradient(ellipse at 18% 55%, #ff5b229c 0%, transparent 55%),
+    radial-gradient(ellipse at 48% 28%, #8b351070 0%, transparent 58%),
+    linear-gradient(110deg, #974008 0%, #762707 34%, #391507 65%, #0d0503 95%);
   filter: blur(24px);
 }
 .site-loader img {
@@ -86,3 +86,4 @@ body.is-loading {
     filter: none;
   }
 }
+
