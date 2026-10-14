@@ -39,6 +39,9 @@ export function finishLoading() {
     loader.addEventListener("transitionend", (event) => {
       if (event.target === loader && event.propertyName === "opacity") remove();
     });
+    loader.addEventListener("animationend", (event) => {
+      if (event.target === loader) remove();
+    });
     setTimeout(remove, firstOpening ? 1050 : 200);
   };
   const remaining = firstOpening

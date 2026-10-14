@@ -41,8 +41,15 @@
 .site-loader.is-closing img {
   animation: loader-exit 0.15s ease-in both;
 }
-.site-loader.is-first-load.is-closing img {
+.site-loader.is-first-load.is-closing {
   animation: loader-zoom-through 0.95s linear both;
+  transition: none;
+}
+.site-loader.is-first-load.is-closing img {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
 }
 body.is-loading {
   overflow: hidden;
@@ -99,4 +106,3 @@ body.is-loading {
     filter: blur(0);
   }
 }
-
