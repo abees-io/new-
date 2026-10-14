@@ -67,6 +67,13 @@ body.is-loading {
   to {
     transform: scale(var(--logo-zoom-scale, 160));
   }
+  0%,
+  65% {
+    filter: blur(0);
+  }
+  100% {
+    filter: blur(8px);
+  }
 }
 @keyframes loader-background-zoom {
   from {
@@ -98,3 +105,4 @@ body.is-loading {
     transition: none !important;
   }
 }
+
