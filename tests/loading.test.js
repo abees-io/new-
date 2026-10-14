@@ -11,7 +11,7 @@ function setup({first=true,reduced=false,width=64,measurementFails=false}={}){
  vm.runInNewContext(source,context);
  return {context,classes,content,get removed(){return removed;},run(delay){const entry=[...timers].find(([,timer])=>timer.delay===delay);assert.ok(entry,`Expected timer ${delay}`);timers.delete(entry[0]);entry[1].fn();}};
 }
-test('loader is removed without animation events and restores page interaction',()=>{const app=setup();app.context.finishLoading();app.context.finishLoading();app.run(1500);assert.ok(app.classes.has('is-closing'));app.run(2500);assert.equal(app.removed,1);assert.equal(app.content.inert,false);});
+test('loader is removed without animation events and restores page interaction',()=>{const app=setup();app.context.finishLoading();app.context.finishLoading();app.run(1500);assert.ok(app.classes.has('is-closing'));app.run(3300);assert.equal(app.removed,1);assert.equal(app.content.inert,false);});
 test('independent watchdog removes loader when page initialization never finishes',()=>{const app=setup();app.run(12000);assert.equal(app.removed,1);assert.equal(app.content.inert,false);app.context.finishLoading();assert.equal(app.removed,1);});
 test('bad or failing logo measurements cannot leave a blocking overlay',()=>{for(const options of [{width:0},{measurementFails:true}]){const app=setup(options);app.context.finishLoading();app.run(1500);assert.equal(app.removed,1);assert.equal(app.content.inert,false);}});
 test('later page loads use immediate close with quick cleanup',()=>{const app=setup({first:false});app.context.finishLoading();assert.ok(app.classes.has('is-closing'));app.run(200);assert.equal(app.removed,1);});

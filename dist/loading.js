@@ -40,7 +40,7 @@ export function finishLoading() {
   }
   const close = () => {
     // Schedule cleanup before measuring or changing animation state.
-    cleanupTimer = setTimeout(removeLoader, first ? 2500 : 200);
+    cleanupTimer = setTimeout(removeLoader, first ? 3300 : 200);
     try {
       if (first) {
         const image = loader.querySelector("img");
