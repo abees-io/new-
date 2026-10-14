@@ -9,9 +9,26 @@
       content="Discover a thoughtful edit of everyday essentials at MIROKU."
     />
     <link rel="icon" href="assets/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&amp;display=swap"
+    />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="app.js"></script>
     <script type="module" src="/navigation.js"></script>
+    <link
+      rel="preconnect"
+      href="https://dfnqemmualhdswvlpawk.supabase.co"
+      crossorigin
+    />
+    <link rel="modulepreload" href="/catalog.js" />
+    <link rel="modulepreload" href="/html-utils.js" />
+    <link rel="modulepreload" href="/format.js" />
+    <link rel="modulepreload" href="/catalog-view.js" />
+    <link rel="modulepreload" href="/delivery.js" />
+    <link rel="modulepreload" href="/pricing.js" />
   </head>
   <body>
     <div class="announcement">A little less ordinary. A lot more everyday.</div>
@@ -52,7 +69,20 @@
         ><span class="bag-label">Bag</span><span id="bag-count">0</span></a
       >
     </header>
-    <main id="main"></main>
+    <main id="main">
+      <div class="catalog-loading" role="status" aria-live="polite">
+        <span>Loading your everyday essentials…</span>
+        <div class="loading-tiles" aria-hidden="true">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <noscript
+        >Please enable JavaScript to browse products and use your bag.</noscript
+      >
+    </main>
     <footer>
       <div class="footer-top">
         <a class="brand" href="index.html">MIROKU</a>

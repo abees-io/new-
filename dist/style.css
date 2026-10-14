@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&display=swap");
 :root {
   --orange: #ff5b22;
   --ink: #242424;
@@ -915,5 +914,31 @@ dialog::backdrop {
   }
   .offer-hero .hero-copy {
     padding-right: 26px;
+  }
+}
+.catalog-loading {
+  min-height: 420px;
+  padding-top: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.loading-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+.loading-tiles > div {
+  aspect-ratio: 1/1.17;
+  background: var(--paper);
+  border-radius: 2px;
+}
+.products > article {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+@media (max-width: 900px) {
+  .loading-tiles {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

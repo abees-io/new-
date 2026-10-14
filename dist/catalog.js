@@ -20,11 +20,43 @@ export function storefrontProduct(p) {
       .map(escapeHTML),
   };
 }
-export async function loadCatalog() {
+const CACHE_KEY = `miroku-catalog:${SUPABASE_URL}`;
+const CACHE_AGE = 15000;
+let refreshing;
+
+async function fetchCatalog() {
   const response = await fetch(
     `${SUPABASE_URL}/rest/v1/miroku_products?select=*&published=eq.true&order=created_at.desc`,
     { headers: { apikey: SUPABASE_KEY }, signal: AbortSignal.timeout(10000) },
   );
   if (!response.ok) throw new Error("Catalogue unavailable");
-  return (await response.json()).map(storefrontProduct);
+  const products = await response.json();
+  if (!Array.isArray(products)) throw new Error("Catalogue unavailable");
+  try {
+    sessionStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({ time: Date.now(), products }),
+    );
+  } catch {}
+  return products.map(storefrontProduct);
+}
+
+export async function loadCatalog({ useCache = false } = {}) {
+  if (useCache) {
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY));
+      const age = Date.now() - cached?.time;
+      if (age >= 0 && age < CACHE_AGE && Array.isArray(cached.products)) {
+        // Only published catalogue data is cached; checkout never uses this shortcut.
+        if (!refreshing)
+          refreshing = fetchCatalog()
+            .catch(() => {})
+            .finally(() => {
+              refreshing = undefined;
+            });
+        return cached.products.map(storefrontProduct);
+      }
+    } catch {}
+  }
+  return fetchCatalog();
 }

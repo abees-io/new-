@@ -1,6 +1,5 @@
 import { deliveryTotal } from "./delivery.js";
 import { discountPercent } from "./pricing.js";
-import { products as sampleProducts } from "./products.js";
 import { loadCatalog } from "./catalog.js";
 import { catalogView } from "./catalog-view.js";
 import { escapeHTML } from "./html-utils.js";
@@ -8,8 +7,9 @@ import { wholeMoney as money } from "./format.js";
 let products,
   usingSamples = false;
 try {
-  products = await loadCatalog();
+  products = await loadCatalog({ useCache: true });
 } catch {
+  const { products: sampleProducts } = await import("./products.js");
   products = sampleProducts;
   usingSamples = true;
 }
@@ -80,7 +80,7 @@ function priceDisplay(p) {
   return `<span class="price-display">${money(p.price)}${Number(p.compare_at_price) > p.price ? ` <del>${money(p.compare_at_price)}</del> <span class="discount-label">${discountPercent(p.price, p.compare_at_price)}% off</span>` : ""}</span>`;
 }
 function card(p) {
-  return `<article><button class="product-image" data-detail="${p.id}" aria-label="View ${p.name}"><img src="${p.image}" alt="${p.name} in ${p.color}" loading="lazy">${p.is_offer || p.tag ? `<span class="tag${p.is_offer ? " offer-tag" : ""}">${p.is_offer ? "Offer" : p.tag}</span>` : ""}</button><div class="product-info"><h3>${p.name}</h3>${priceDisplay(p)}</div><div class="product-meta"><p>${p.color}${!usingSamples && p.stock === 0 ? " · Sold out" : ""}</p><button class="add" ${!usingSamples && p.stock === 0 ? "disabled" : ""} data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></article>`;
+  return `<article><button class="product-image" data-detail="${p.id}" aria-label="View ${p.name}"><img src="${p.image}" alt="${p.name} in ${p.color}" loading="lazy" decoding="async">${p.is_offer || p.tag ? `<span class="tag${p.is_offer ? " offer-tag" : ""}">${p.is_offer ? "Offer" : p.tag}</span>` : ""}</button><div class="product-info"><h3>${p.name}</h3>${priceDisplay(p)}</div><div class="product-meta"><p>${p.color}${!usingSamples && p.stock === 0 ? " · Sold out" : ""}</p><button class="add" ${!usingSamples && p.stock === 0 ? "disabled" : ""} data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></article>`;
 }
 
 let category = "All",
