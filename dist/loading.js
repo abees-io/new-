@@ -6,7 +6,13 @@ const covered = loader
     }))
   : [];
 let closing = false;
+let firstOpening = true;
 if (loader) {
+  try {
+    firstOpening = sessionStorage.getItem("miroku-opened") !== "1";
+    sessionStorage.setItem("miroku-opened", "1");
+  } catch {}
+  loader.classList.add(firstOpening ? "is-first-load" : "is-page-load");
   document.body.classList.add("is-loading");
   covered.forEach(({ element }) => (element.inert = true));
 }
@@ -32,5 +38,5 @@ export function finishLoading() {
     },
     { once: true },
   );
-  setTimeout(remove, 500);
+  setTimeout(remove, firstOpening ? 350 : 200);
 }
