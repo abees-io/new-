@@ -30,6 +30,7 @@ const page = location.pathname.endsWith("shop.html")
   : location.pathname.endsWith("cart.html")
     ? "cart"
     : "home";
+document.body.dataset.page = page;
 document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
 let toastTimer;
 function notify(message) {
@@ -81,7 +82,42 @@ function priceDisplay(p) {
   return `<span class="price-display">${money(p.price)}${Number(p.compare_at_price) > p.price ? ` <del>${money(p.compare_at_price)}</del> <span class="discount-label">${discountPercent(p.price, p.compare_at_price)}% off</span>` : ""}</span>`;
 }
 function card(p) {
-  return `<article><button class="product-image" data-detail="${p.id}" aria-label="View ${p.name}"><img src="${p.image}" alt="${p.name} in ${p.color}" loading="lazy" decoding="async">${p.is_offer || p.tag ? `<span class="tag${p.is_offer ? " offer-tag" : ""}">${p.is_offer ? "Offer" : p.tag}</span>` : ""}</button><div class="product-info"><h3>${p.name}</h3>${priceDisplay(p)}</div><div class="product-meta"><p>${p.color}${!usingSamples && p.stock === 0 ? " · Sold out" : ""}</p><button class="add" ${!usingSamples && p.stock === 0 ? "disabled" : ""} data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></article>`;
+  return (
+    '<article class="product-card"><button class="product-image" data-detail="' +
+    p.id +
+    '" aria-label="View ' +
+    p.name +
+    '"><img src="' +
+    p.image +
+    '" alt="' +
+    p.name +
+    '" loading="lazy" decoding="async">' +
+    (p.is_offer || p.tag
+      ? '<span class="tag ' +
+        (p.is_offer ? "offer-tag" : "") +
+        '">' +
+        (p.is_offer ? "Featured offer" : p.tag) +
+        "</span>"
+      : "") +
+    '</button><div class="product-copy"><p class="product-category">' +
+    p.category +
+    '</p><div class="product-info"><h3>' +
+    p.name +
+    '</h3><button class="add" ' +
+    (!usingSamples && p.stock === 0 ? "disabled" : "") +
+    ' data-add="' +
+    p.id +
+    '" aria-label="Add ' +
+    p.name +
+    ' to bag">+</button></div><div class="product-meta">' +
+    priceDisplay(p) +
+    "<span>" +
+    (!usingSamples && p.stock === 0 ? "Sold out" : p.color) +
+    "</span></div></div></article>"
+  );
+}
+function campaignMarkup() {
+  return '<section class="campaign" id="campaign"><div class="campaign-heading"><div class="eyebrow">The everyday, turned up</div><h1>feel the <em>good.</em></h1><span class="campaign-edition">THE MIROKU EDIT / 01</span></div><div class="style-strip" aria-hidden="true"><span>GOOD THINGS. BIG ENERGY.</span><b>✳</b><span>GOOD THINGS. BIG ENERGY.</span><b>✳</b><span>GOOD THINGS. BIG ENERGY.</span><b>✳</b><span>GOOD THINGS. BIG ENERGY.</span></div><div class="campaign-media"><img src="/assets/campaign-red-yellow.webp" alt="MIROKU editorial campaign: yellow streetwear against a fire-red backdrop" width="1536" height="1024" fetchpriority="high" decoding="async"><div class="campaign-copy"><span class="campaign-kicker">A LITTLE LESS ORDINARY.</span><h2>Your everyday.<br>A little louder.</h2><p>A considered edit of good things, made for wherever the day takes you.</p><a class="primary yellow-button" href="#collection">Explore the edit <span aria-hidden="true">↗</span></a></div><div class="campaign-sticker" aria-hidden="true">GOOD<br>BY DESIGN<span>✳</span></div><span class="campaign-caption">FIND YOUR NEXT EVERYDAY FAVOURITE.</span></div></section>';
 }
 
 let category = "All",
@@ -112,40 +148,14 @@ function renderSpotlight() {
   if (!area || spotlightQuery === query) return;
   spotlightQuery = query;
   const offers = catalogView(products, { query }).filter((p) => p.is_offer);
-  const first = offers[0];
-  area.hidden = Boolean(query.trim()) && !first;
-  if (first) {
-    area.innerHTML =
-      '<section class="hero offer-hero" aria-label="Featured offer"><div class="hero-copy"><div class="eyebrow">Featured offer</div><h1>' +
-      first.name +
-      "</h1><p>" +
-      first.description +
-      '</p><p class="offer-price">' +
-      priceDisplay(first) +
-      '</p><button class="primary" data-detail="' +
-      first.id +
-      '">View offer</button></div><button class="hero-media offer-photo" data-detail="' +
-      first.id +
-      '" aria-label="View offer: ' +
-      first.name +
-      '"><img src="' +
-      first.image +
-      '" alt="' +
-      first.name +
-      '"><span class="offer-badge">Offer</span></button></section>' +
-      (offers.length > 1
-        ? '<section class="more-offers"><div class="section-head"><h2>More offers.</h2></div><div class="products">' +
-          offers.slice(1).map(card).join("") +
-          "</div></section>"
-        : "");
-  } else {
-    area.innerHTML =
-      '<section class="hero"><div class="hero-copy"><div class="eyebrow">The everyday collection</div><h1>Everyday things.<br><em>Extra good.</em></h1><p>A thoughtful edit of the things you reach for, day after day.</p><a class="primary" href="#collection">Explore the collection</a></div><div class="hero-media"><img src="' +
-      (products[0]?.image || "assets/logo.png") +
-      '" alt="' +
-      (products[0]?.name || "MIROKU") +
-      '"><div class="hero-stamp">LESS,<br>BUT BETTER.</div></div></section>';
-  }
+  area.hidden = !offers.length;
+  area.innerHTML = offers.length
+    ? '<section class="offers-section" aria-label="Featured offers"><div class="section-head"><div><div class="eyebrow">A good find, made better</div><h2>the offer edit.</h2></div><span class="section-pill">FEATURED OFFERS ↗</span></div><div class="products offer-products">' +
+      offers.map(card).join("") +
+      "</div></section>"
+    : "";
+  const campaign = document.querySelector("#campaign");
+  if (campaign) campaign.hidden = Boolean(query.trim());
 }
 function renderProducts() {
   const list = catalogView(products, { category, query, sort });
@@ -170,10 +180,11 @@ if (page === "home" || page === "shop") {
   main.innerHTML =
     searchMarkup() +
     (page === "home"
-      ? '<div id="home-spotlight"></div><section id="collection"><div class="section-head"><div><h2>All your everyday essentials.</h2><p>Explore every product, all in one place.</p></div></div>' +
+      ? campaignMarkup() +
+        '<div id="home-spotlight"></div><section id="collection"><div class="section-head"><div><div class="eyebrow">Fresh picks. Everyday keepers.</div><h2>the good stuff.</h2></div><a class="section-pill" href="shop.html">SHOP ALL ↗</a></div>' +
         collectionMarkup() +
         "</section>"
-      : '<div class="page-heading"><div class="eyebrow">Considered essentials</div><h1>The collection.</h1><p>Good things for your everyday, all in one place.</p></div>' +
+      : '<div class="page-heading"><div class="eyebrow">Considered essentials</div><h1>the collection.</h1><p>Your everyday essentials. A little more you.</p></div>' +
         collectionMarkup());
   renderProducts();
   document.querySelector("#sort").addEventListener("change", (e) => {

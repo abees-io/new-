@@ -38,6 +38,8 @@ http
         ".css": "text/css",
         ".js": "application/javascript",
         ".png": "image/png",
+        ".webp": "image/webp",
+        ".woff2": "font/woff2",
       };
       res.writeHead(200, {
         "Content-Type": types[path.extname(file)] || "application/octet-stream",

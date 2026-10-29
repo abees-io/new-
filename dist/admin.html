@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Righteous&amp;display=swap"
     />
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/admin.css" />
@@ -36,18 +36,28 @@
           >
             <path d="m14 6-6 6 6 6M8 12h12" /></svg></a
         ><a class="brand" href="/"
-          ><img src="/assets/logo.png" alt="" />MIROKU</a
-        >
+          ><img src="/assets/logo.png" alt="" /><img
+            class="brand-wordmark"
+            src="/assets/miroku-wordmark.webp"
+            alt="MIROKU"
+            width="2053"
+            height="766"
+        /></a>
       </div>
       <span class="admin-label">Store admin</span
       ><a href="/shop.html" class="text-link">View store</a>
     </header>
     <main class="admin-main">
+      <nav class="admin-navigation" aria-label="Admin navigation">
+        <a href="/admin" aria-current="page">Products</a
+        ><a href="/admin/orders">Orders</a
+        ><a href="/shop.html">Storefront ↗</a>
+      </nav>
       <div id="message" role="status" aria-live="polite"></div>
       <section id="login-panel" class="login-card">
         <div class="eyebrow">Your store, your space</div>
-        <h1>Welcome back.</h1>
-        <p>Sign in to manage your products.</p>
+        <h1>your store.<br />your rules.</h1>
+        <p>Good things start here. Sign in to your workspace.</p>
         <form id="login-form">
           <label
             >Email<input
@@ -85,7 +95,7 @@
         <div class="admin-heading">
           <div>
             <div class="eyebrow">MIROKU collection</div>
-            <h1>Your products.</h1>
+            <h1>the collection.</h1>
             <p id="product-count"></p>
           </div>
           <div class="actions">

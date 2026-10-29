@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Righteous&amp;display=swap"
     />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="app.js"></script>
@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="/loading.css" />
     <link rel="preload" as="image" href="/assets/loading-logo.png" />
     <script type="module" src="/loading.js"></script>
+    <link rel="preload" as="image" href="/assets/campaign-red-yellow.webp" />
   </head>
   <body>
     <div
@@ -55,7 +56,10 @@
         }
       </style></noscript
     >
-    <div class="announcement">A little less ordinary. A lot more everyday.</div>
+    <div class="announcement">
+      GOOD THINGS. BIG ENERGY. <span aria-hidden="true">✳</span> MEET YOUR NEW
+      EVERYDAY.
+    </div>
     <header>
       <div class="header-start">
         <a
@@ -74,8 +78,13 @@
           >
             <path d="m14 6-6 6 6 6M8 12h12" /></svg></a
         ><a class="brand" href="index.html" aria-label="MIROKU home"
-          ><img src="assets/logo.png" alt="" />MIROKU</a
-        >
+          ><img src="assets/logo.png" alt="" /><img
+            class="brand-wordmark"
+            src="/assets/miroku-wordmark.webp"
+            alt="MIROKU"
+            width="2053"
+            height="766"
+        /></a>
       </div>
       <nav aria-label="Main navigation">
         <a href="index.html" data-page="home">Home</a

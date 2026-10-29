@@ -12,7 +12,7 @@
   transition: opacity 0.15s linear;
 }
 .site-loader.is-first-load {
-  background: #1d0b04;
+  background: #260909;
 }
 .site-loader.is-first-load:before {
   content: "";
@@ -20,9 +20,9 @@
   inset: -18%;
   z-index: -1;
   background:
-    radial-gradient(ellipse at 18% 55%, #ff702bd9 0%, transparent 55%),
-    radial-gradient(ellipse at 48% 28%, #c04e148c 0%, transparent 58%),
-    linear-gradient(110deg, #db5a16 0%, #a93d0b 34%, #612507 50%, #160904 95%);
+    radial-gradient(ellipse at 18% 55%, #ffde0099 0%, transparent 55%),
+    radial-gradient(ellipse at 48% 28%, #e62727cc 0%, transparent 58%),
+    linear-gradient(110deg, #e62727 0%, #b51f1f 34%, #651313 50%, #240909 95%);
   filter: blur(24px);
 }
 .site-loader img {
@@ -114,4 +114,3 @@ body.is-loading {
     transition: none !important;
   }
 }
-

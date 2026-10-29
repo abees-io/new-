@@ -170,7 +170,7 @@ function openPayment(customer = {}) {
       email: customer.email,
       contact: customer.phone ? `+91${customer.phone}` : undefined,
     },
-    theme: { color: "#ff5b20" },
+    theme: { color: "#E62727" },
     handler: verify,
     modal: {
       ondismiss() {
