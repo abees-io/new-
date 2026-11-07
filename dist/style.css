@@ -664,13 +664,20 @@ select {
 }
 .loading-tiles {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px 22px;
   margin-top: 28px;
 }
 .loading-tiles > div {
-  aspect-ratio: 1;
-  background: var(--paper);
+  aspect-ratio: 1/1.15;
+  background: linear-gradient(
+    90deg,
+    var(--paper) 25%,
+    #ebe7e0 37%,
+    var(--paper) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: 7px;
 }
 .cart-layout {
@@ -1159,6 +1166,14 @@ dialog::backdrop {
   }
   .product-info h3 {
     font-size: 15px;
+  }
+}
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {

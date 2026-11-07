@@ -1,116 +1,58 @@
+/* Loading Skeleton & Site Loader */
 .site-loader {
-  --logo-size: 64px;
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: grid;
-  place-items: center;
-  isolation: isolate;
-  overflow: hidden;
-  background: transparent;
-  opacity: 1;
-  transition: opacity 0.15s linear;
+  display: none !important;
 }
-.site-loader.is-first-load {
-  background: #260909;
-}
-.site-loader.is-first-load:before {
-  content: "";
-  position: absolute;
-  inset: -18%;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse at 18% 55%, #ffde0099 0%, transparent 55%),
-    radial-gradient(ellipse at 48% 28%, #e62727cc 0%, transparent 58%),
-    linear-gradient(110deg, #e62727 0%, #b51f1f 34%, #651313 50%, #240909 95%);
-  filter: blur(24px);
-}
-.site-loader img {
-  width: var(--logo-size);
-  height: var(--logo-size);
-  object-fit: contain;
-}
-.site-loader.is-first-load img {
-  animation: loader-enter 0.45s ease-out both;
-}
-.site-loader.is-closing {
-  opacity: 0;
-  pointer-events: none;
-}
-.site-loader.is-first-load.is-closing {
-  animation: loader-dismiss 0.8s 2.4s linear both;
-  transition: none;
-}
-.site-loader.is-first-load.is-closing img {
-  position: absolute;
-  left: calc(50% - var(--logo-size) * 0.25);
-  top: calc(50% + var(--logo-size) * 0.1);
-  transform: translate(-25%, -60%);
-  animation:
-    loader-left-zoom 2.4s linear forwards,
-    loader-near-blur 2.4s linear forwards;
-}
-.site-loader.is-first-load.is-closing:before {
-  animation: loader-background-zoom 2.4s linear forwards;
-}
+
 body.is-loading {
-  overflow: hidden;
+  overflow: auto;
 }
-@keyframes loader-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-@keyframes loader-left-zoom {
-  from {
-    width: var(--logo-size);
-    height: var(--logo-size);
-  }
-  to {
-    width: calc(var(--logo-size) * var(--logo-zoom-scale, 160));
-    height: calc(var(--logo-size) * var(--logo-zoom-scale, 160));
-  }
-}
-@keyframes loader-near-blur {
-  0%,
-  14% {
-    filter: blur(0);
+
+/* Skeleton shimmer animations */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
   }
   100% {
-    filter: blur(8px);
+    background-position: 200% 0;
   }
 }
-@keyframes loader-background-zoom {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(2);
+
+.catalog-loading {
+  min-height: 400px;
+  color: var(--muted, #6e6b68);
+  font-size: 13px;
+}
+
+.loading-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px 22px;
+  margin-top: 28px;
+}
+
+.loading-tiles > div {
+  aspect-ratio: 1/1.15;
+  background: linear-gradient(
+    90deg,
+    var(--paper, #f4f2ee) 25%,
+    #ebe7e0 37%,
+    var(--paper, #f4f2ee) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 7px;
+}
+
+@media (max-width: 900px) {
+  .loading-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 14px;
   }
 }
-@keyframes loader-dismiss {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-@media (max-width: 600px) {
-  .site-loader {
-    --logo-size: 52px;
-  }
-}
+
 @media (prefers-reduced-motion: reduce) {
-  .site-loader,
-  .site-loader img,
-  .site-loader:before {
+  .loading-tiles > div {
     animation: none !important;
-    transition: none !important;
   }
 }
+
